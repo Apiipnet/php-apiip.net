@@ -1,0 +1,73 @@
+<?php
+
+namespace ApiipClient;
+
+use Exception;
+use GuzzleHttp\Client;
+
+class Apiip{
+  const API_URL = 'http://apiip.net/api/check';
+  const API_URL_SSL = 'https://apiip.net/api/check';
+  private $access_key;
+  private $http_client;
+  private $settings;
+  private $url;
+  private $options = [
+    'output',
+    'ip',
+    'fields',
+    'language',
+    'callback',
+  ];
+  public function __construct(string $access_key = '', $settings = []){  
+    try {
+      $this->access_key = $access_key;
+      $this->settings = $settings;
+      if (!$access_key) {
+        throw new Exception('Access key is required!');
+      }
+      $this->url = $settings['ssl'] ? self::API_URL_SSL : self::API_URL;
+      $this->url .=  '?accessKey=' . $this->access_key;
+      $this->http_client = new Client();
+    } catch(Exception $e) {
+      return $e->getMessage();
+    }
+  }
+
+ 
+  public function getLocation($options = []){
+    try{
+      $prepare_url = $this->url . $this->createUrl($options);
+
+      try {
+        $response = $this->http_client->request('GET', $prepare_url);
+      } catch (GuzzleException $e) {
+        throw new Exception($e->getMessage());
+      } catch (Exception $e) {
+        throw new Exception($e->getMessage());
+      }
+  
+      $raw_details = json_decode($response->getBody(), true);
+      return $raw_details;
+
+    } catch (Exception $e) {
+      throw new Exception($e->getMessage());
+    }
+
+  }
+
+  private function createUrl($options = []){
+    $url = '';
+
+    foreach($options as $key => $value){
+      if (!array_key_exists($key, $this->options)){
+        continue;
+      }
+      $url .= '&' . $key . '=' . $value;
+    }
+
+    return $url;
+  }
+ 
+}
+?>

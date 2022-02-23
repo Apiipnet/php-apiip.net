@@ -1,0 +1,35 @@
+{
+  "name": "apiip/apiip.net",
+  "type": "library",
+  "description": "The official PHP library for apiip.net that allowing customers to automate IP address validation and geolocation lookup in websites, applications and back-office system. Visit our API docs at https://apiip.net/documentation",
+  "keywords": [
+    "ip to location",
+    "apiip.net",
+    "apiip",
+    "ip api",
+    "php geolocation",
+    "ip location api",
+    "php ip location",
+    "geolocate with php",
+    "iplocation api",
+    "ip2location"
+  ],
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Apiipnet",
+      "email": "apiipnet.business@gmail.com",
+      "homepage": "https://apiip.net"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "guzzlehttp/guzzle": "^6.3||^7.0",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ApiipClient\\": "src"
+    }
+  }
+}
