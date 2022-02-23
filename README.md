@@ -1,18 +1,16 @@
-# IP to Location (Node.js and browser)
+# IP to Location (PHP)
 
 <p>
 <a href="https://apiip.net"><img alt="apiip.net website status" src="https://img.shields.io/website?down_color=red&down_message=offline&label=apiip.net%20website&up_color=success&up_message=online&url=https%3A%2F%2Fapiip.net%2F"> </a>
 <a href="https://status.apiip.net/"><img alt="Uptime Robot status" src="https://img.shields.io/uptimerobot/status/m789879229-16fa66289487470e7544d58a?label=API%20status"></a>
 <a href="https://status.apiip.net/"><img alt="Uptime Robot ratio (30 days)" src="https://img.shields.io/uptimerobot/ratio/m789879229-16fa66289487470e7544d58a?label=API%20uptime%20%2830%20days%29"></a>
-<img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/npm/apiip.net">
-<img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/Apiipnet/apiip.net">
-<img alt="npm downloads" src="https://img.shields.io/npm/dw/apiip.net?label=npm%20downloads">
-<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/Apiipnet/apiip.net">
-<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/apiipnet/apiip.net">
-<img alt="NPM licence" src="https://img.shields.io/npm/l/apiip.net?color=green">
-<img alt="npm version" src="https://img.shields.io/npm/v/apiip.net">
-
+<img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/Apiipnet/php-apiip.net">
+<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/Apiipnet/php-apiip.net">
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/apiipnet/php-apiip.net">
 </p>
+
+This is the official PHP client library for the [Apiip.net](https://apiip.net) IP address API, allowing you to lookup your own IP address, or get any of the details for an IP.
+
 Find geolocation data from IP addresses (e.g. city, country, lat/long) using the apiip.net API.
 
 Apiip.net provides 100 free requests per month. For higher plans, check out the [website](https://apiip.net)
@@ -24,33 +22,22 @@ You need to get your API key from here: https://apiip.net/get-started and you'll
 Install the package with:
 
 ```sh
-npm install apiip.net
-# or
-yarn add apiip.net
+composer require apiip/apiip.net
 ```
 
 ## Usage
 
 The package needs to be configured with your account's API key, which is available in the [Apiip.net Dashboard](https://apiip.net/user/dashboard)
 
-```javascript
-const apiip = require("apiip.net")("YOUR_API_KEY");
+```php
+use ApiipClient\Apiip;
 
-apiip
-  .getLocation()
-  .then((results) => console.log(results))
-  .catch((error) => console.error(error));
-```
+$access_key = 'YOUR_ACCESS_KEY';
+$client = new Apiip($access_key);
+$details = $client->getLocation();
 
-Or using ES6 modules and async/await:
-
-```javascript
-import Apiip from "apiip.net";
-const apiip = Apiip("YOUR_API_KEY");
-
-(async () => {
-  console.log(await apiip.getLocation());
-})();
+$details['city'];
+Belgrade
 ```
 
 ## HTTPS Encryption
@@ -59,42 +46,36 @@ By default, the SSL/TLS is turned off, if you want to enable it just pass the op
 
 #### Example
 
-```javascript
-const apiip = require("apiip.net")("YOUR_API_KEY", { ssl: true });
-```
+```php
+use ApiipClient\Apiip;
 
-Or using ES6 module import
-
-```javascript
-import Apiip from "apiip.net";
-const apiip = Apiip("YOUR_API_KEY", { ssl: true });
+$access_key = 'YOUR_ACCESS_KEY';
+$client = new Apiip($access_key, ['ssl' => true]);
 ```
 
 ## Configuration
 
 Call getLocation method with config object
 
-```javascript
-const apiip = require("apiip.net")("YOUR_API_KEY", { ssl: true });
+```php
+use ApiipClient\Apiip;
 
-apiip
-  .getLocation({
-    ip: "67.250.186.196", // '67.250.186.196, 188.79.34.191, 60.138.7.24' - for bulk request
-    output: "xml",
-    fields: "city, countryName, currency.name",
-    languages: "es",
-  })
-  .then((results) => console.log(results))
-  .catch((error) => console.error(error));
+$access_key = 'YOUR_ACCESS_KEY';
+$client = new Apiip($access_key, ['ssl' => true]);
+$details = $client->getLocation([
+  'ip' => $ip_address, // 67.250.186.196, 188.79.34.191, 60.138.7.24 - for bulk request
+  'output' => 'xml',
+  'fields' => 'city,country',
+  'languages' => 'es'
+]);
 ```
 
-| Option      | Type     | Description                                                                                                | Default      |
-| ----------- | -------- | ---------------------------------------------------------------------------------------------------------- | ------------ |
-| `ip`        | `string` | _Optional_. Get location about the specify IP or multiple IPs.                                             | Requester IP |
-| `output`    | `string` | _Optional_. Specify response format, XML or JSON.                                                          | JSON         |
-| `fields`    | `string` | _Optional_. Specify response fields.                                                                       | All fields   |
-| `languages` | `string` | _Optional_. Specify response language.                                                                     | EN           |
-| `callback`  | `string` | _Optional_. The callback function name ([JSONP Callbacks](https://www.w3schools.com/js/js_json_jsonp.asp)) | -            |
+| Option      | Type     | Description                                                    | Default      |
+| ----------- | -------- | -------------------------------------------------------------- | ------------ |
+| `ip`        | `string` | _Optional_. Get location about the specify IP or multiple IPs. | Requester IP |
+| `output`    | `string` | _Optional_. Specify response format, XML or JSON.              | JSON         |
+| `fields`    | `string` | _Optional_. Specify response fields.                           | All fields   |
+| `languages` | `string` | _Optional_. Specify response language.                         | EN           |
 
 ## Example complete response
 

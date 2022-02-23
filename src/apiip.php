@@ -4,6 +4,7 @@ namespace ApiipClient;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class Apiip{
   const API_URL = 'http://apiip.net/api/check';
@@ -17,7 +18,6 @@ class Apiip{
     'ip',
     'fields',
     'language',
-    'callback',
   ];
   public function __construct(string $access_key = '', $settings = []){  
     try {
@@ -26,46 +26,47 @@ class Apiip{
       if (!$access_key) {
         throw new Exception('Access key is required!');
       }
-      $this->url = $settings['ssl'] ? self::API_URL_SSL : self::API_URL;
+      $this->url = array_key_exists('ssl', $settings) && $settings['ssl'] === true ? self::API_URL_SSL : self::API_URL;
       $this->url .=  '?accessKey=' . $this->access_key;
       $this->http_client = new Client();
     } catch(Exception $e) {
-      return $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
 
  
   public function getLocation($options = []){
-    try{
       $prepare_url = $this->url . $this->createUrl($options);
-
+      
       try {
         $response = $this->http_client->request('GET', $prepare_url);
-      } catch (GuzzleException $e) {
-        throw new Exception($e->getMessage());
+      } catch (ClientException $e) {
+        $response = $e->getResponse();
+        $response_body = $response->getBody();
+        throw new Exception($response_body);
       } catch (Exception $e) {
         throw new Exception($e->getMessage());
       }
-  
-      $raw_details = json_decode($response->getBody(), true);
-      return $raw_details;
 
-    } catch (Exception $e) {
-      throw new Exception($e->getMessage());
-    }
-
+      $headers = $response->getHeaders();
+      if (strpos($headers['Content-Type'][0], 'xml')){
+        $raw_details = simplexml_load_string($response->getBody());
+        return $raw_details;
+      } else {
+        $raw_details = json_decode($response->getBody(), true);
+        return $raw_details;
+      }
   }
 
   private function createUrl($options = []){
     $url = '';
 
     foreach($options as $key => $value){
-      if (!array_key_exists($key, $this->options)){
+      if (!in_array($key, $this->options)){
         continue;
       }
       $url .= '&' . $key . '=' . $value;
     }
-
     return $url;
   }
  
