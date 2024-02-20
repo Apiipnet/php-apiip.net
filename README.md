@@ -9,15 +9,15 @@
 <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/apiipnet/php-apiip.net">
 </p>
 
-This is the official PHP client library for the [Apiip.net](https://apiip.net) IP address API, allowing you to lookup your own IP address, or get any of the details for an IP.
+This is the official PHP client library for the [apiip.net](https://apiip.net) IP address geolocation API, allowing you to lookup your own IP address, or get any of the details for an IP.
 
 Find geolocation data from IP addresses (e.g. city, country, lat/long) using the apiip.net API.
 
-Apiip.net provides 5.000 free requests per month. For higher plans, check out the [website](https://apiip.net)
+apiip.net provides 1.000 free requests per month. For higher plans, check out the [website](https://apiip.net)
 
 ## Installation
 
-You need to get your API key from here: https://apiip.net/get-started and you'll get 5.000 free requests/month
+You need to get your API key from here: https://apiip.net/get-started and you'll get 1.000 free requests/month
 
 Install the package with:
 
@@ -27,7 +27,7 @@ composer require apiip/apiip.net
 
 ## Usage
 
-The package needs to be configured with your account's API key, which is available in the [Apiip.net Dashboard](https://apiip.net/user/dashboard)
+The package needs to be configured with your account's API key, which is available in the [apiip.net Dashboard](https://apiip.net/user/dashboard)
 
 ```php
 use ApiipClient\Apiip;
@@ -42,7 +42,7 @@ Belgrade
 
 ## HTTPS Encryption
 
-By default, the SSL/TLS is turned off, if you want to enable it just pass the options parameter
+By default, the SSL/TLS is turned on, if you want to disable it just pass the options parameter
 
 #### Example
 
@@ -50,7 +50,7 @@ By default, the SSL/TLS is turned off, if you want to enable it just pass the op
 use ApiipClient\Apiip;
 
 $access_key = 'YOUR_ACCESS_KEY';
-$client = new Apiip($access_key, ['ssl' => true]);
+$client = new Apiip($access_key, ['ssl' => false]);
 ```
 
 ## Configuration
@@ -61,7 +61,7 @@ Call getLocation method with config object
 use ApiipClient\Apiip;
 
 $access_key = 'YOUR_ACCESS_KEY';
-$client = new Apiip($access_key, ['ssl' => true]);
+$client = new Apiip($access_key);
 $details = $client->getLocation([
   'ip' => $ip_address, // 67.250.186.196, 188.79.34.191, 60.138.7.24 - for bulk request
   'output' => 'xml',

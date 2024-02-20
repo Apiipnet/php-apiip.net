@@ -26,7 +26,7 @@ class Apiip{
       if (!$access_key) {
         throw new Exception('Access key is required!');
       }
-      $this->url = array_key_exists('ssl', $settings) && $settings['ssl'] === true ? self::API_URL_SSL : self::API_URL;
+      $this->url = array_key_exists('ssl', $settings) && $settings['ssl'] === false ? self::API_URL : self::API_URL_SSL;
       $this->url .=  '?accessKey=' . $this->access_key;
       $this->http_client = new Client();
     } catch(Exception $e) {

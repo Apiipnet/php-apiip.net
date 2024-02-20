@@ -12,13 +12,14 @@
     "php ip location",
     "geolocate with php",
     "iplocation api",
-    "ip2location"
+    "ip2location",
+    "ip geolocation api"
   ],
   "license": "Apache-2.0",
   "authors": [
     {
-      "name": "Apiipnet",
-      "email": "apiipnet.business@gmail.com",
+      "name": "apiip",
+      "email": "contact@apiip.net",
       "homepage": "https://apiip.net"
     }
   ],
